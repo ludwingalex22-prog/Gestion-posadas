@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<section class="container-fluid py-4">
+    <div class="row g-4">
+        <aside class="col-lg-2">
+            <div class="card panel-card">
+                <div class="card-body">
+                    <h5 class="fw-bold">Administración</h5>
+                    <div class="list-group list-group-flush">
+                        <a class="list-group-item list-group-item-action" href="{% url 'panel_administracion' %}">Dashboard</a>
+                        <a class="list-group-item list-group-item-action" href="{% url 'panel_habitaciones' %}">Habitaciones</a>
+                        <a class="list-group-item list-group-item-action" href="{% url 'panel_reservas' %}">Reservas</a>
+                        <a class="list-group-item list-group-item-action" href="{% url 'panel_tipos_habitacion' %}">Tipos</a>
+                        <a class="list-group-item list-group-item-action" href="{% url 'panel_servicios' %}">Servicios</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="col-lg-10">
+            {% block panel %}{% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}

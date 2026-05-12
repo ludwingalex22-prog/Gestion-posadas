@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block titulo %}Iniciar sesión | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card tarjeta-elegante">
+                <div class="card-body p-4 p-md-5">
+                    <span class="badge badge-acento mb-3">Acceso seguro</span>
+                    <h1 class="fw-bold mb-1">Iniciar sesión</h1>
+                    <p class="text-muted">
+                        Los clientes pueden consultar sus reservas. Los administradores ingresan al mismo acceso y serán enviados al panel administrativo.
+                    </p>
+
+                    {% if formulario.errors %}
+                        <div class="alert alert-danger rounded-4">Usuario o contraseña incorrectos.</div>
+                    {% endif %}
+
+                    <form method="post" class="vstack gap-3">
+                        {% csrf_token %}
+                        {% if siguiente %}
+                            <input type="hidden" name="next" value="{{ siguiente }}">
+                        {% endif %}
+                        <div>
+                            <label class="form-label" for="id_username">Usuario</label>
+                            <input type="text" name="username" id="id_username" class="form-control" required autofocus>
+                        </div>
+                        <div>
+                            <label class="form-label" for="id_password">Contraseña</label>
+                            <input type="password" name="password" id="id_password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primario btn-lg">Entrar</button>
+                    </form>
+
+                    <hr>
+                    <p class="mb-0 text-muted">
+                        ¿Aún no tienes cuenta?
+                        <a href="{% url 'registrar_cliente' %}{% if siguiente %}?next={{ siguiente|urlencode }}{% endif %}" class="fw-semibold">Crear cuenta de cliente</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block titulo %}Habitaciones | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="mb-4">
+        <span class="badge badge-acento mb-2">Consulta pública</span>
+        <h1 class="fw-bold mb-1">Elige tu habitación ideal</h1>
+        <p class="text-muted mb-0">Navega el catálogo libremente y usa las fechas para mostrar solo habitaciones disponibles.</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <h4 class="fw-bold">Buscar disponibilidad</h4>
+                    <p class="text-muted small">
+                        Elige fechas para que el sistema muestre únicamente habitaciones libres en ese rango.
+                    </p>
+
+                    <form method="get" class="vstack gap-3">
+                        <div>
+                            <label class="form-label">{{ formulario.fecha_entrada.label }}</label>
+                            {{ formulario.fecha_entrada }}
+                            <div class="text-danger small">{{ formulario.fecha_entrada.errors }}</div>
+                        </div>
+                        <div>
+                            <label class="form-label">{{ formulario.fecha_salida.label }}</label>
+                            {{ formulario.fecha_salida }}
+                            <div class="text-danger small">{{ formulario.fecha_salida.errors }}</div>
+                        </div>
+                        <div>
+                            <label class="form-label">{{ formulario.personas.label }}</label>
+                            {{ formulario.personas }}
+                            <div class="text-danger small">{{ formulario.personas.errors }}</div>
+                        </div>
+                        <button type="submit" class="btn btn-primario">Consultar disponibilidad</button>
+                        <a href="{% url 'listar_habitaciones' %}" class="btn btn-outline-secondary">Limpiar filtro</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="fw-bold mb-1">Habitaciones</h1>
+                    {% if fechas_filtradas %}
+                        <p class="text-muted mb-0">
+                            Disponibles del <strong>{{ fecha_entrada }}</strong> al <strong>{{ fecha_salida }}</strong>.
+                        </p>
+                    {% else %}
+                        <p class="text-muted mb-0">
+                            Catálogo general. Para reservar con mayor seguridad, primero consulta disponibilidad por fecha.
+                        </p>
+                    {% endif %}
+                </div>
+                <span class="badge text-bg-light">{{ habitaciones|length }} resultado{{ habitaciones|length|pluralize }}</span>
+            </div>
+
+            {% if not fechas_filtradas %}
+                <div class="alert alert-info rounded-4">
+                    Puedes ver el detalle de cada habitación, pero la disponibilidad real se calcula según las fechas de entrada y salida.
+                </div>
+            {% endif %}
+
+            <div class="row g-4">
+                {% for habitacion in habitaciones %}
+                    {% include "componentes/tarjeta_habitacion.html" with habitacion=habitacion fechas_filtradas=fechas_filtradas %}
+                {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-warning rounded-4">
+                            No se encontraron habitaciones disponibles con los filtros seleccionados.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

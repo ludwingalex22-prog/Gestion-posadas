@@ -1,0 +1,237 @@
+:root {
+    --color-primario: #0f3d2e;
+    --color-secundario: #0b1f3a;
+    --color-acento: #d6b56d;
+    --color-fondo: #f5f7f6;
+}
+
+body {
+    background: var(--color-fondo);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.tema-calido {
+    --color-primario: #a94f24;
+    --color-secundario: #4b2619;
+    --color-acento: #e7a85f;
+    --color-fondo: #fff7ef;
+    --color-suave: #f5dfca;
+    color: #2d2018;
+}
+
+.navbar {
+    background: linear-gradient(90deg, var(--color-secundario), var(--color-primario));
+}
+
+body.tema-calido .navbar {
+    background: linear-gradient(90deg, #3b2017, #6d351f, #a94f24);
+}
+
+.navbar-brand,
+.nav-link {
+    letter-spacing: 0.2px;
+}
+
+.btn-claro {
+    background: #fff7ef;
+    color: var(--color-secundario);
+    border-color: #fff7ef;
+}
+
+.btn-claro:hover {
+    background: #ffe9d2;
+    color: var(--color-secundario);
+}
+
+.hero {
+    background:
+        linear-gradient(120deg, rgba(11, 31, 58, 0.88), rgba(15, 61, 46, 0.82)),
+        url("../img/fondo-posada.svg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-radius: 0 0 2rem 2rem;
+}
+
+.hero-inicio {
+    min-height: 620px;
+    background:
+        linear-gradient(90deg, rgba(59, 32, 23, 0.34), rgba(169, 79, 36, 0.10), rgba(59, 32, 23, 0.22)),
+        url("../img/banner-posada.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-panel {
+    max-width: 650px;
+    border-radius: 1.5rem;
+    background: rgba(72, 39, 27, 0.62);
+    box-shadow: 0 18px 55px rgba(38, 24, 17, 0.25);
+    backdrop-filter: blur(6px);
+}
+
+.tarjeta-elegante {
+    border: 0;
+    border-radius: 1.25rem;
+    box-shadow: 0 12px 35px rgba(16, 24, 40, 0.08);
+}
+
+body.tema-calido .tarjeta-elegante {
+    box-shadow: 0 12px 35px rgba(77, 43, 24, 0.10);
+}
+
+.tarjeta-habitacion {
+    transition: 0.25s ease;
+    overflow: hidden;
+}
+
+.tarjeta-habitacion:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(16, 24, 40, 0.14);
+}
+
+body.tema-calido .tarjeta-habitacion:hover {
+    box-shadow: 0 16px 40px rgba(77, 43, 24, 0.16);
+}
+
+.imagen-habitacion {
+    height: 230px;
+    object-fit: cover;
+    background: #dfe8e2;
+}
+
+body.tema-calido .imagen-habitacion {
+    background: #f1ddc8;
+}
+
+.imagen-detalle {
+    height: 430px;
+    object-fit: cover;
+    background: #dfe8e2;
+}
+
+body.tema-calido .imagen-detalle {
+    background: #f1ddc8;
+}
+
+.badge-acento {
+    background: rgba(214, 181, 109, 0.16);
+    color: #6e551d;
+    border: 1px solid rgba(214, 181, 109, 0.38);
+}
+
+body.tema-calido .badge-acento {
+    color: #7a3b1c;
+    background: rgba(231, 168, 95, 0.22);
+    border: 1px solid rgba(231, 168, 95, 0.45);
+}
+
+body.tema-calido .hero .badge-acento,
+body.tema-calido .hero-inicio .badge-acento {
+    color: #fff7ef;
+    border-color: rgba(255, 240, 220, 0.42);
+}
+
+.btn-primario {
+    background: var(--color-primario);
+    border-color: var(--color-primario);
+    color: white;
+}
+
+.btn-primario:hover {
+    background: #0a2d22;
+    border-color: #0a2d22;
+    color: white;
+}
+
+body.tema-calido .btn-primario:hover {
+    background: #843d1d;
+    border-color: #843d1d;
+}
+
+.btn-outline-primario {
+    border-color: var(--color-primario);
+    color: var(--color-primario);
+}
+
+.btn-outline-primario:hover {
+    background: var(--color-primario);
+    color: white;
+}
+
+.panel-card {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgba(16, 24, 40, 0.08);
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.resumen-pago {
+    background: linear-gradient(135deg, var(--color-secundario), var(--color-primario));
+    color: white;
+}
+
+.footer {
+    background: #081827;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+body.tema-calido .footer {
+    background: #2a1711;
+}
+
+.estado-chip {
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.estado-confirmada {
+    background: #e3f6e8;
+    color: #146c2e;
+}
+
+.estado-pendiente {
+    background: #fff1cc;
+    color: #805b00;
+}
+
+.estado-cancelada,
+.estado-no-presentada {
+    background: #ffe1df;
+    color: #9a271f;
+}
+
+.estado-finalizada {
+    background: #e8ecf6;
+    color: #253b73;
+}
+
+.mini-indicador {
+    width: 2.7rem;
+    height: 2.7rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(231, 168, 95, 0.20);
+    color: var(--color-primario);
+    font-weight: 800;
+}
+
+@media (max-width: 768px) {
+    .hero-inicio {
+        min-height: 560px;
+        background-position: center;
+    }
+
+    .hero-panel {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+}

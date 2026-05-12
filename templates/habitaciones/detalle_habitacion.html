@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ habitacion.nombre }} | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card tarjeta-elegante overflow-hidden">
+                {% if habitacion.imagenes.all %}
+                    <div id="galeriaHabitacion" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for imagen in habitacion.imagenes.all %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ imagen.imagen.url }}" class="d-block w-100 imagen-detalle" alt="{{ imagen.descripcion }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#galeriaHabitacion" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#galeriaHabitacion" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="imagen-detalle d-flex align-items-center justify-content-center text-muted">
+                        Sin imágenes cargadas
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <span class="badge badge-acento mb-3">{{ habitacion.tipo_habitacion.nombre }}</span>
+                    <h1 class="fw-bold">{{ habitacion.nombre }}</h1>
+                    <p class="text-muted">{{ habitacion.descripcion }}</p>
+
+                    <div class="row g-3 my-3">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-4">
+                                <div class="small text-muted">Capacidad</div>
+                                <div class="fw-bold">{{ habitacion.capacidad_maxima }} personas</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-4">
+                                <div class="small text-muted">Precio por noche</div>
+                                <div class="fw-bold">Q {{ habitacion.precio_por_noche }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mt-4">Servicios</h5>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        {% for servicio in habitacion.servicios.all %}
+                            <span class="badge text-bg-light">{{ servicio.nombre }}</span>
+                        {% empty %}
+                            <span class="text-muted">No hay servicios registrados.</span>
+                        {% endfor %}
+                    </div>
+
+                    {% if promedio_puntuacion %}
+                        <p class="small text-muted">
+                            Puntuación promedio: <strong>{{ promedio_puntuacion|floatformat:1 }}/5</strong>
+                        </p>
+                    {% endif %}
+
+                    {% if request.GET.fecha_entrada and request.GET.fecha_salida %}
+                        <div class="alert alert-success rounded-4 small">
+                            Se reservará con entrada {{ request.GET.fecha_entrada }} y salida {{ request.GET.fecha_salida }}.
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info rounded-4 small">
+                            En el siguiente paso podrás elegir fechas. El sistema volverá a validar disponibilidad antes del pago.
+                        </div>
+                    {% endif %}
+
+                    {% if user.is_authenticated and not user.is_staff %}
+                        <a href="{{ ruta_reserva }}" class="btn btn-primario btn-lg w-100">
+                            Reservar esta habitación
+                        </a>
+                    {% elif user.is_authenticated and user.is_staff %}
+                        <a href="{% url 'panel_administracion' %}" class="btn btn-outline-primario btn-lg w-100">
+                            Ir al panel administrativo
+                        </a>
+                    {% else %}
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'login' %}?next={{ ruta_reserva|urlencode }}" class="btn btn-primario btn-lg">
+                                Iniciar sesión para reservar
+                            </a>
+                            <a href="{% url 'registrar_cliente' %}?next={{ ruta_reserva|urlencode }}" class="btn btn-outline-primario btn-lg">
+                                Crear cuenta de cliente
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h3 class="fw-bold">Comentarios</h3>
+        <div class="row g-3 mt-2">
+            {% for comentario in comentarios %}
+                <div class="col-md-6">
+                    <div class="card tarjeta-elegante">
+                        <div class="card-body">
+                            <div class="fw-bold">{{ comentario.puntuacion }}/5</div>
+                            <p class="mb-1">{{ comentario.comentario }}</p>
+                            <small class="text-muted">
+                                {{ comentario.reserva.cliente.nombre }} {{ comentario.reserva.cliente.apellido }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Aún no hay comentarios aprobados para esta habitación.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

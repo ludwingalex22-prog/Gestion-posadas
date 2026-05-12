@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block titulo %}Confirmar pago | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-5">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <span class="badge badge-acento mb-3">Paso 2 de 2</span>
+                    <h2 class="fw-bold">Resumen de reserva</h2>
+                    <p class="text-muted">Revisa el subtotal antes de confirmar el pago.</p>
+
+                    <div class="bg-light rounded-4 p-4 vstack gap-2">
+                        <div><strong>Cliente:</strong> {{ datos_reserva.nombre }} {{ datos_reserva.apellido }}</div>
+                        <div><strong>Habitación:</strong> {{ habitacion.nombre }}</div>
+                        <div><strong>Entrada:</strong> {{ fecha_entrada }}</div>
+                        <div><strong>Salida:</strong> {{ fecha_salida }}</div>
+                        <div><strong>Noches:</strong> {{ noches }}</div>
+                        <div><strong>Personas:</strong> {{ datos_reserva.cantidad_personas }}</div>
+                        <div><strong>Precio por noche:</strong> Q {{ habitacion.precio_por_noche }}</div>
+                    </div>
+
+                    <div class="mt-4 p-4 rounded-4 resumen-pago">
+                        <div class="small">Total a pagar</div>
+                        <div class="display-6 fw-bold">Q {{ total_reserva }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <h1 class="fw-bold mb-2">Confirmar pago</h1>
+                    <p class="text-muted">
+                        Al confirmar el pago, la reserva quedará registrada como <strong>Confirmada</strong>.
+                    </p>
+
+                    <form method="post" class="row g-3" id="formularioPagoCliente" data-total-pago="{{ total_reserva }}">
+                        {% csrf_token %}
+
+                        {% if formulario.non_field_errors %}
+                            <div class="col-12">
+                                <div class="alert alert-danger">{{ formulario.non_field_errors }}</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.metodo_pago.label }}</label>
+                            {{ formulario.metodo_pago }}
+                            <div class="text-danger small">{{ formulario.metodo_pago.errors }}</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.monto_recibido.label }}</label>
+                            {{ formulario.monto_recibido }}
+                            <div class="text-danger small">{{ formulario.monto_recibido.errors }}</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">{{ formulario.referencia.label }}</label>
+                            {{ formulario.referencia }}
+                            <div class="text-danger small">{{ formulario.referencia.errors }}</div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <div class="small text-muted">Total</div>
+                                        <div class="fw-bold">Q {{ total_reserva }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <div class="small text-muted">Monto recibido</div>
+                                        <div class="fw-bold" id="montoRecibidoVista">Q 0.00</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <div class="small text-muted">Cambio</div>
+                                        <div class="fw-bold" id="cambioVista">Q 0.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex gap-2 flex-wrap">
+                            <button type="submit" class="btn btn-primario btn-lg">Pagar y confirmar reserva</button>
+                            <a href="{% url 'crear_reserva' habitacion.id %}" class="btn btn-outline-secondary btn-lg">Regresar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

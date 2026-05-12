@@ -1,0 +1,40 @@
+{% extends "administracion/base_panel.html" %}
+
+{% block titulo %}Pago manual | Panel{% endblock %}
+
+{% block panel %}
+<h1 class="fw-bold mb-4">Registrar pago manual</h1>
+
+<div class="card panel-card">
+    <div class="card-body">
+        <p class="text-muted">
+            Reserva: <strong>{{ reserva.codigo_reserva }}</strong> |
+            Saldo pendiente: <strong>Q {{ reserva.saldo_pendiente }}</strong>
+        </p>
+        <div class="alert alert-info rounded-4 small">
+            Este apartado es para pagos presenciales, ajustes o pagos que administración necesite registrar manualmente. En el flujo normal, el cliente paga antes de confirmar la reserva.
+        </div>
+
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+
+            {% if formulario.non_field_errors %}
+                <div class="col-12"><div class="alert alert-danger">{{ formulario.non_field_errors }}</div></div>
+            {% endif %}
+
+            {% for campo in formulario %}
+                <div class="col-md-6 {% if campo.name == 'observaciones' %}col-md-12{% endif %}">
+                    <label class="form-label">{{ campo.label }}</label>
+                    {{ campo }}
+                    <div class="text-danger small">{{ campo.errors }}</div>
+                </div>
+            {% endfor %}
+
+            <div class="col-12 d-flex gap-2">
+                <button class="btn btn-primario">Guardar pago manual</button>
+                <a href="{% url 'detalle_reserva_admin' reserva.id %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

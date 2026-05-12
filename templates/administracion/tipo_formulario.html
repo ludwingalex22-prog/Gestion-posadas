@@ -1,0 +1,26 @@
+{% extends "administracion/base_panel.html" %}
+
+{% block titulo %}{{ titulo }} | Panel{% endblock %}
+
+{% block panel %}
+<h1 class="fw-bold mb-4">{{ titulo }}</h1>
+
+<div class="card panel-card">
+    <div class="card-body">
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            {% for campo in formulario %}
+                <div class="col-md-6 {% if campo.name == 'descripcion' %}col-md-12{% endif %}">
+                    <label class="form-label">{{ campo.label }}</label>
+                    {{ campo }}
+                    <div class="text-danger small">{{ campo.errors }}</div>
+                </div>
+            {% endfor %}
+            <div class="col-12 d-flex gap-2">
+                <button class="btn btn-primario">Guardar</button>
+                <a href="{% url 'panel_tipos_habitacion' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

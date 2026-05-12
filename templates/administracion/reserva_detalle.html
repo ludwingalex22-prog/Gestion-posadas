@@ -1,0 +1,90 @@
+{% extends "administracion/base_panel.html" %}
+
+{% block titulo %}Detalle de reserva | Panel{% endblock %}
+
+{% block panel %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">{{ reserva.codigo_reserva }}</h1>
+        <p class="text-muted mb-0">{{ reserva.cliente }} - {{ reserva.habitacion }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'editar_reserva' reserva.id %}" class="btn btn-outline-primary">Editar</a>
+        <a href="{% url 'registrar_pago' reserva.id %}" class="btn btn-outline-secondary">Pago manual</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card panel-card">
+            <div class="card-body">
+                <h4 class="fw-bold">Información de la reserva</h4>
+                <div class="vstack gap-2">
+                    <div><strong>Estado:</strong> {{ reserva.estado_reserva.nombre }}</div>
+                    <div><strong>Entrada:</strong> {{ reserva.fecha_entrada }}</div>
+                    <div><strong>Salida:</strong> {{ reserva.fecha_salida }}</div>
+                    <div><strong>Noches:</strong> {{ reserva.noches }}</div>
+                    <div><strong>Personas:</strong> {{ reserva.cantidad_personas }}</div>
+                    <div><strong>Total:</strong> Q {{ reserva.total_estimado }}</div>
+                    <div><strong>Total pagado:</strong> Q {{ reserva.total_pagado }}</div>
+                    <div><strong>Saldo pendiente:</strong> Q {{ reserva.saldo_pendiente }}</div>
+                    <div><strong>Observaciones:</strong> {{ reserva.observaciones|default:"Sin observaciones" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card panel-card">
+            <div class="card-body">
+                <h4 class="fw-bold">Datos del cliente</h4>
+                <div class="vstack gap-2">
+                    <div><strong>Nombre:</strong> {{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}</div>
+                    <div><strong>DPI:</strong> {{ reserva.cliente.dpi|default:"No registrado" }}</div>
+                    <div><strong>Teléfono:</strong> {{ reserva.cliente.telefono }}</div>
+                    <div><strong>Correo:</strong> {{ reserva.cliente.correo|default:"No registrado" }}</div>
+                </div>
+                <div class="alert alert-info rounded-4 mt-4 small mb-0">
+                    El pago normal lo registra el cliente en el flujo público. El botón de pago manual queda solo para pagos presenciales, ajustes o casos especiales.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card panel-card mt-4">
+    <div class="card-body">
+        <h4 class="fw-bold">Pagos</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Método</th>
+                        <th>Aplicado</th>
+                        <th>Recibido</th>
+                        <th>Cambio</th>
+                        <th>Referencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in reserva.pagos.all %}
+                        <tr>
+                            <td>{{ pago.fecha_pago }}</td>
+                            <td>{{ pago.metodo_pago.nombre }}</td>
+                            <td>Q {{ pago.monto }}</td>
+                            <td>Q {{ pago.monto_recibido|default:pago.monto }}</td>
+                            <td>Q {{ pago.cambio }}</td>
+                            <td>{{ pago.referencia|default:"-" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-muted">No hay pagos registrados.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

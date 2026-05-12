@@ -1,0 +1,78 @@
+{% extends "administracion/base_panel.html" %}
+
+{% block titulo %}{{ titulo }} | Panel{% endblock %}
+
+{% block panel %}
+<h1 class="fw-bold mb-4">{{ titulo }}</h1>
+
+<div class="card panel-card mb-4">
+    <div class="card-body">
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+
+            {% if formulario.non_field_errors %}
+                <div class="col-12">
+                    <div class="alert alert-danger">{{ formulario.non_field_errors }}</div>
+                </div>
+            {% endif %}
+
+            {% for campo in formulario %}
+                <div class="col-md-6 {% if campo.name == 'descripcion' or campo.name == 'servicios' %}col-md-12{% endif %}">
+                    <label class="form-label fw-semibold">{{ campo.label }}</label>
+                    {{ campo }}
+                    <div class="text-danger small">{{ campo.errors }}</div>
+                </div>
+            {% endfor %}
+
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primario">Guardar</button>
+                <a href="{% url 'panel_habitaciones' %}" class="btn btn-outline-secondary">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if habitacion %}
+    <div class="card panel-card">
+        <div class="card-body">
+            <h4 class="fw-bold">Imágenes</h4>
+
+            <form method="post" enctype="multipart/form-data" action="{% url 'agregar_imagen_habitacion' habitacion.id %}" class="row g-3 mb-4">
+                {% csrf_token %}
+                {% for campo in formulario_imagen %}
+                    <div class="col-md-3">
+                        <label class="form-label">{{ campo.label }}</label>
+                        {{ campo }}
+                        <div class="text-danger small">{{ campo.errors }}</div>
+                    </div>
+                {% endfor %}
+                <div class="col-md-12">
+                    <button class="btn btn-outline-primario">Agregar imagen</button>
+                </div>
+            </form>
+
+            <div class="row g-3">
+                {% for imagen in habitacion.imagenes.all %}
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="{{ imagen.imagen.url }}" class="card-img-top" style="height: 140px; object-fit: cover;">
+                            <div class="card-body">
+                                <div class="small">{{ imagen.descripcion }}</div>
+                                {% if imagen.es_principal %}
+                                    <span class="badge text-bg-success">Principal</span>
+                                {% endif %}
+                                <form method="post" action="{% url 'eliminar_imagen_habitacion' imagen.id %}" class="mt-2">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No hay imágenes cargadas.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

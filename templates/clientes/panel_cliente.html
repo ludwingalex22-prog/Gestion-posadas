@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block titulo %}Mi cuenta | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="row g-4 align-items-center mb-4">
+        <div class="col-lg-8">
+            <span class="badge badge-acento mb-2">Panel de cliente</span>
+            <h1 class="fw-bold mb-1">Hola, {{ cliente.nombre }}</h1>
+            <p class="text-muted mb-0">Consulta tus reservas, pagos y estados registrados en Posada El Descanso.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <a href="{% url 'listar_habitaciones' %}" class="btn btn-primario">Nueva reserva</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <div class="text-muted small">Total de reservas</div>
+                    <div class="fs-3 fw-bold">{{ total_reservas }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <div class="text-muted small">Activas</div>
+                    <div class="fs-3 fw-bold">{{ reservas_activas|length }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <div class="text-muted small">Confirmadas</div>
+                    <div class="fs-3 fw-bold">{{ reservas_confirmadas }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card tarjeta-elegante">
+                <div class="card-body">
+                    <div class="text-muted small">Canceladas</div>
+                    <div class="fs-3 fw-bold">{{ reservas_canceladas }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if reservas_activas %}
+        <div class="card tarjeta-elegante mb-4">
+            <div class="card-body p-4">
+                <h4 class="fw-bold mb-3">Reservas activas</h4>
+                <div class="row g-3">
+                    {% for reserva in reservas_activas %}
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 h-100">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <strong>{{ reserva.habitacion.nombre }}</strong>
+                                    <span class="estado-chip estado-{{ reserva.estado_reserva.nombre|lower }}">{{ reserva.estado_reserva.nombre }}</span>
+                                </div>
+                                <div class="small text-muted mt-2">
+                                    {{ reserva.fecha_entrada }} al {{ reserva.fecha_salida }} · {{ reserva.noches }} noche{{ reserva.noches|pluralize }}
+                                </div>
+                                <a href="{% url 'detalle_reserva_cliente' reserva.codigo_reserva %}" class="btn btn-sm btn-outline-primario mt-3">Ver detalle</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="card tarjeta-elegante">
+        <div class="card-body p-4">
+            <h4 class="fw-bold mb-3">Historial de reservas</h4>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Habitación</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in reservas %}
+                            <tr>
+                                <td>{{ reserva.codigo_reserva }}</td>
+                                <td>{{ reserva.habitacion.nombre }}</td>
+                                <td>{{ reserva.fecha_entrada }}</td>
+                                <td>{{ reserva.fecha_salida }}</td>
+                                <td>Q {{ reserva.total_estimado }}</td>
+                                <td><span class="estado-chip estado-{{ reserva.estado_reserva.nombre|lower }}">{{ reserva.estado_reserva.nombre }}</span></td>
+                                <td class="text-end">
+                                    <a href="{% url 'detalle_reserva_cliente' reserva.codigo_reserva %}" class="btn btn-sm btn-outline-primario">Detalle</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-muted">Aún no tienes reservas registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

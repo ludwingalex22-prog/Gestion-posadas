@@ -1,0 +1,21 @@
+{% extends "administracion/base_panel.html" %}
+
+{% block titulo %}Desactivar habitación | Panel{% endblock %}
+
+{% block panel %}
+<div class="card panel-card">
+    <div class="card-body">
+        <h1 class="fw-bold">Desactivar habitación</h1>
+        <p class="text-muted">
+            La habitación <strong>{{ habitacion }}</strong> pasará a estado inactiva.
+            No se eliminarán sus reservas históricas.
+        </p>
+
+        <form method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            <button class="btn btn-danger">Sí, desactivar</button>
+            <a href="{% url 'panel_habitaciones' %}" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

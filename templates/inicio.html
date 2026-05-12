@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="hero hero-inicio">
+    <div class="container h-100 d-flex align-items-end">
+        <div class="hero-panel mb-5 p-4 p-md-5">
+            <span class="badge badge-acento mb-3">Reservas en línea</span>
+            <h1 class="fw-bold mb-3">Una estadía cómoda, cálida y fácil de reservar.</h1>
+            <p class="mb-4">
+                Consulta disponibilidad por fechas, revisa habitaciones y confirma tu reserva desde una experiencia clara para clientes.
+            </p>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <a href="{% url 'listar_habitaciones' %}" class="btn btn-light btn-lg">Consultar disponibilidad</a>
+                {% if user.is_authenticated and not user.is_staff %}
+                    <a href="{% url 'panel_cliente' %}" class="btn btn-outline-light btn-lg">Ver mi cuenta</a>
+                {% elif not user.is_authenticated %}
+                    <a href="{% url 'registrar_cliente' %}" class="btn btn-outline-light btn-lg">Crear cuenta</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="row g-4 align-items-center mb-4">
+        <div class="col-lg-8">
+            <h2 class="fw-bold">Habitaciones destacadas</h2>
+            <p class="text-muted mb-0">
+                Puedes explorar el catálogo libremente. Para reservar, el sistema te pedirá iniciar sesión o crear una cuenta de cliente.
+            </p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <a href="{% url 'listar_habitaciones' %}" class="btn btn-outline-primario">Ver todas</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for habitacion in habitaciones_destacadas %}
+            {% include "componentes/tarjeta_habitacion.html" with habitacion=habitacion %}
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info rounded-4">Aún no hay habitaciones disponibles para mostrar.</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="container pb-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card tarjeta-elegante h-100">
+                <div class="card-body p-4">
+                    <div class="mini-indicador mb-3">1</div>
+                    <h5 class="fw-bold">Busca por fechas</h5>
+                    <p class="text-muted mb-0">El sistema calcula disponibilidad real según entrada, salida y cantidad de personas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card tarjeta-elegante h-100">
+                <div class="card-body p-4">
+                    <div class="mini-indicador mb-3">2</div>
+                    <h5 class="fw-bold">Crea tu cuenta</h5>
+                    <p class="text-muted mb-0">Tus reservas quedan asociadas a tu perfil para consultar historial y estados.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card tarjeta-elegante h-100">
+                <div class="card-body p-4">
+                    <div class="mini-indicador mb-3">3</div>
+                    <h5 class="fw-bold">Confirma el pago</h5>
+                    <p class="text-muted mb-0">Se calcula el total por noches, se registra el pago y la reserva queda confirmada.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

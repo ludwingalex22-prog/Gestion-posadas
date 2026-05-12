@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block titulo %}Detalle de reserva | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card tarjeta-elegante">
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                        <div>
+                            <span class="badge badge-acento mb-2">Reserva</span>
+                            <h1 class="fw-bold mb-1">{{ reserva.codigo_reserva }}</h1>
+                            <p class="text-muted mb-0">Detalle de tu reservación registrada.</p>
+                        </div>
+                        <div>
+                            <span class="estado-chip estado-{{ reserva.estado_reserva.nombre|lower }}">{{ reserva.estado_reserva.nombre }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 h-100">
+                                <div class="small text-muted">Habitación</div>
+                                <div class="fw-bold">{{ reserva.habitacion.nombre }}</div>
+                                <div class="small text-muted">{{ reserva.habitacion.tipo_habitacion.nombre }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 h-100">
+                                <div class="small text-muted">Cliente</div>
+                                <div class="fw-bold">{{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}</div>
+                                <div class="small text-muted">{{ reserva.cliente.telefono }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded-4 h-100">
+                                <div class="small text-muted">Entrada</div>
+                                <div class="fw-bold">{{ reserva.fecha_entrada }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded-4 h-100">
+                                <div class="small text-muted">Salida</div>
+                                <div class="fw-bold">{{ reserva.fecha_salida }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded-4 h-100">
+                                <div class="small text-muted">Noches</div>
+                                <div class="fw-bold">{{ reserva.noches }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 resumen-pago rounded-4 mb-4">
+                        <div class="small">Total de reserva</div>
+                        <div class="display-6 fw-bold">Q {{ reserva.total_estimado }}</div>
+                        <div class="small">Total pagado: Q {{ reserva.total_pagado }}</div>
+                    </div>
+
+                    {% if pago %}
+                        <h4 class="fw-bold">Pago registrado</h4>
+                        <div class="table-responsive mb-4">
+                            <table class="table">
+                                <tr>
+                                    <th>Método</th>
+                                    <td>{{ pago.metodo_pago.nombre }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Monto aplicado</th>
+                                    <td>Q {{ pago.monto }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Monto recibido</th>
+                                    <td>Q {{ pago.monto_recibido }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cambio</th>
+                                    <td>Q {{ pago.cambio }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Fecha de pago</th>
+                                    <td>{{ pago.fecha_pago }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                    {% if reserva.observaciones %}
+                        <div class="alert alert-info rounded-4">
+                            <strong>Observaciones:</strong> {{ reserva.observaciones }}
+                        </div>
+                    {% endif %}
+
+                    <a href="{% url 'panel_cliente' %}" class="btn btn-primario">Volver a mi cuenta</a>
+                    <a href="{% url 'listar_habitaciones' %}" class="btn btn-outline-primario">Ver habitaciones</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

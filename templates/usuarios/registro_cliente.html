@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block titulo %}Crear cuenta | Posada El Descanso{% endblock %}
+{% block clase_body %}tema-calido{% endblock %}
+
+{% block contenido %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card tarjeta-elegante">
+                <div class="card-body p-4 p-md-5">
+                    <span class="badge badge-acento mb-3">Cuenta de cliente</span>
+                    <h1 class="fw-bold mb-2">Crear cuenta</h1>
+                    <p class="text-muted">
+                        Regístrate para reservar habitaciones y consultar el historial de tus reservaciones.
+                    </p>
+
+                    <form method="post" class="row g-3">
+                        {% csrf_token %}
+                        {% if siguiente %}
+                            <input type="hidden" name="next" value="{{ siguiente }}">
+                        {% endif %}
+
+                        {% if formulario.non_field_errors %}
+                            <div class="col-12">
+                                <div class="alert alert-danger rounded-4">{{ formulario.non_field_errors }}</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.username.label }}</label>
+                            {{ formulario.username }}
+                            <div class="text-danger small">{{ formulario.username.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.correo.label }}</label>
+                            {{ formulario.correo }}
+                            <div class="text-danger small">{{ formulario.correo.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.nombre.label }}</label>
+                            {{ formulario.nombre }}
+                            <div class="text-danger small">{{ formulario.nombre.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.apellido.label }}</label>
+                            {{ formulario.apellido }}
+                            <div class="text-danger small">{{ formulario.apellido.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.telefono.label }}</label>
+                            {{ formulario.telefono }}
+                            <div class="text-danger small">{{ formulario.telefono.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.dpi.label }}</label>
+                            {{ formulario.dpi }}
+                            <div class="text-danger small">{{ formulario.dpi.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.password1.label }}</label>
+                            {{ formulario.password1 }}
+                            <div class="form-text">{{ formulario.password1.help_text }}</div>
+                            <div class="text-danger small">{{ formulario.password1.errors }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ formulario.password2.label }}</label>
+                            {{ formulario.password2 }}
+                            <div class="form-text">{{ formulario.password2.help_text }}</div>
+                            <div class="text-danger small">{{ formulario.password2.errors }}</div>
+                        </div>
+
+                        <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-3">
+                            <button type="submit" class="btn btn-primario btn-lg">Crear cuenta</button>
+                            <a href="{% url 'login' %}{% if siguiente %}?next={{ siguiente|urlencode }}{% endif %}" class="btn btn-outline-primario btn-lg">Ya tengo cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
